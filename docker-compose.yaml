@@ -1,0 +1,35 @@
+version: '3'
+services: 
+    db:
+       image: mysql:5.7
+       command: --innodb-use-native-aio=0 #comando q será executado ao iniciar a aplicação, executado dopois do entrypoint
+       container_name: db
+       restart: always
+       tty: true
+       networks:
+        - naruto 
+       environment:
+        - MYSQL_DATABASE=nodedb
+        #- MYSQL_ROOT_PASSWORD=my-secret-pw
+        #- MYSQL_USER=teste
+       volumes:
+        - ./mysql:/var/lib/mysql
+    
+    server:
+        build: 
+            context: ./node
+        container_name: server
+        #entrypoint: dockerize -wait tcp://db3306 -timeout 20 docker-entrypoint.sh
+        tty: true
+        networks: 
+            - naruto
+        volumes: 
+            - ./node:/usr/src/app
+        ports: 
+            - "3000:3000"
+        depends_on: 
+            - db
+        
+networks: 
+    naruto:
+        driver: bridge

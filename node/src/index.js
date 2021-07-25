@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 app.use('/', async (request, response)=>{
-    response.send("teste")
+    response.send("conventional commit push")
 })
 
 app.listen(port, ()=>{
